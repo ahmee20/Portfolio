@@ -1,0 +1,116 @@
+{
+  "project_title": "Ahmad's Pixel Loft OS — Interactive Portfolio Design Guidelines",
+  "context_type": "Interactive Portfolio & Retro Pixel OS",
+  "theme": "Dark Pixel-Art Vintage OS (Loft Midnight Palette)",
+  "instructions_to_main_agent": [
+    "Do NOT redesign the room interiors or portfolio data in portfolio.js / RoomArt.jsx. Preserve house room art and existing layout exactly as specified.",
+    "Implement the 5 requested updates cleanly with rigorous pixel-art fidelity and proper data-testid hooks.",
+    "1. ROOM SOUNDS: Add subtle Web Audio API synthesized procedural sounds (no external audio files needed; prevents broken asset URLs). Implement a short crisp mechanical click when hovering/focusing or clicking a room (sine/triangle 800Hz->300Hz quick 35ms blip), and a soft wooden door creak/latch thud upon opening/clicking a room (dual-tone frequency modulated filter drop over 160ms with slight resonant friction). Wire this into room button onMouseEnter/onClick.",
+    "2. COMPACT MUSIC PLAYER: The current desktop player length is bloated (disc + 160px track bar + full control strip with slider + volume percent = ~420px). Cut its total visible length by ~80% into a tight, handsome rectangular badge (~86px to 96px total width). Display a mini spinning vinyl disc (22px-24px) paired with an icon play/pause button and a discreet popover trigger. When clicked, it pops up the full track details, seekbar, and volume slider. Keep the 10% default volume and retained songs intact.",
+    "3. DISMISSIBLE GUIDE POPUP: The guide message speech bubble currently has pointer-events-none and cannot be closed. Give the speech bubble interactive pointer-events, add an explicit retro pixel cross button ('✕' / X) in the top-right corner with data-testid='guide-dismiss-button', allowing the user to dismiss or collapse the bubble. Include a small mini-toggle or clicking the pixel figure to restore the tip.",
+    "4. AHMAD'S ROOF BRANDING (ALIGNED IN ROOF DIRECTION): The house roof is an angled trapezoid/triangle created with CSS borders (borderBottom 56px, borderLeft/Right 36px). Ahmad requested 'Ahmad's .... anything and place it on the roof of the house - in the direction of the roof, not plain text'. Place an authentic pixelated angled signplate along the roof pitch: 'AHMAD'S LOFT // AI RESIDENCE'. Position it on the roof shingle plane angled with CSS transform skew/rotate matching the roof pitch (-3.5deg to -4deg or pitched banner along the left slope, or dual pitch 'AHMAD'S' on the left rafter slope (-18deg skewY/rotate) and 'AI LOFT' / 'DEV LAB' on the right rafter slope, or a pitched gable crest banner with pixel rivets and drop shadow).",
+    "5. DISTINCTIVE ATMOSPHERIC BACKGROUND: Replace the generic flat gradient with a custom lightweight interactive 2D Canvas pixel nightscape: 'Midnight Islamabad Skyline with Lo-Fi Twinkling Stars, Soft Passing Pixel Clouds & Subtle Ambient Window Lights'. Rendered via requestAnimationFrame on an HTML5 canvas behind the house. Matches Ahmad's Islamabad origin, masculine retro aesthetic, zero glow, clean crisp pixel edges."
+  ],
+  "typography": {
+    "font_pixel": "\"Press Start 2P\", monospace",
+    "font_body": "\"Space Grotesk\", \"Work Sans\", sans-serif",
+    "hierarchy": {
+      "roof_brand": "text-[9px] sm:text-[10px] tracking-[0.22em] uppercase font-pixel",
+      "window_title": "text-[10px] sm:text-[11px] uppercase tracking-wider font-pixel",
+      "room_tag": "text-[8px] uppercase tracking-wider font-pixel",
+      "taskbar_btn": "text-[9px] uppercase tracking-wider font-pixel",
+      "body_text": "text-[12px] sm:text-[13px] leading-relaxed"
+    }
+  },
+  "colors": {
+    "palette": {
+      "loft_bg": "#12151c",
+      "loft_bg_sky": "#1a1f2c",
+      "loft_ink": "#16171c",
+      "loft_paper": "#f3efe6",
+      "loft_paper_hover": "#f5e6c8",
+      "loft_amber": "#d9962b",
+      "loft_amber_hover": "#e6a63a",
+      "loft_amber_dark": "#b87a1c",
+      "loft_teal": "#2f8f83",
+      "loft_wood": "#5a3d2b",
+      "loft_wood_dark": "#3f1d17",
+      "loft_roof": "#7e352c",
+      "loft_roof_edge": "#5c2a22",
+      "loft_taskbar": "#12141a",
+      "loft_border": "#3a3f4f",
+      "sky_stars": ["#f3efe6", "#d9962b", "#7f9a97", "#3a3f4f"]
+    },
+    "contrast_verification": {
+      "text_on_amber": "var(--loft-ink) on #d9962b (ratio 9.1:1, Passes AAA)",
+      "text_on_paper": "var(--loft-ink) on #f3efe6 (ratio 14.8:1, Passes AAA)",
+      "text_on_taskbar": "#f3efe6 on #12141a (ratio 16.2:1, Passes AAA)",
+      "roof_branding": "#f3efe6 text on #5c2a22 / #7e352c roof board (ratio 7.8:1, Passes AAA)"
+    }
+  },
+  "visual_enhancers": {
+    "background_art": {
+      "type": "Custom HTML5 Canvas Pixel Nightscape",
+      "file_location": "/app/frontend/src/components/LoftSkyCanvas.jsx",
+      "features": [
+        "Pixel grid scaling: Canvas internally rendered at low resolution (e.g. 320x180 or 480x270) with CSS `image-rendering: pixelated` for crisp retro pixels",
+        "Layer 1: Deep twilight gradient with pixel dither band transition",
+        "Layer 2: 45 twinkling stars with 3 distinct brightness phases",
+        "Layer 3: Distant pixelated silhouette of the Margalla Hills / Islamabad mountain ridge with occasional blinking communication tower light",
+        "Layer 4: Slow drifting pixel clouds (2 layers with parallax speeds 0.15px and 0.08px per frame)",
+        "Zero performance overhead, zero external dependencies"
+      ]
+    },
+    "roof_treatment": {
+      "concept": "Pitched Architectural Signboard following the slope of the gable roof",
+      "implementation": "Inside House.jsx roof container. Positioned over the left or right slope using CSS transform rotate/skew (-14deg on left pitch or +14deg on right pitch, or a centered angled brass nameplate with 3D pixel bevel: 'AHMAD'S AI LOFT'). Includes embossed brass pixel border (2px solid #3f1d17), background #5c2a22, lettering #f3efe6 with #d9962b punctuation."
+    },
+    "sound_system": {
+      "file_location": "/app/frontend/src/utils/sfx.js",
+      "engine": "Web Audio API (AudioContext) synthesizer",
+      "sounds": {
+        "room_hover": "Short 25ms high-frequency crisp click (sine wave, 900Hz to 400Hz, volume 0.04)",
+        "door_open": "180ms dual-stage sound: 40ms mechanical latch click (square wave filtered at 600Hz) followed by a 140ms low wooden resonance creak/door swing (triangle wave 180Hz drifting to 90Hz with gentle lowpass filter, volume 0.07)",
+        "guide_close": "30ms soft paper flick (bandpassed white noise burst, volume 0.05)"
+      }
+    }
+  },
+  "component_specifications": {
+    "MusicPlayer": {
+      "path": "/app/frontend/src/components/MusicPlayer.jsx",
+      "modifications": [
+        "Desktop size reduced by 80%: replace the long 420px strip with a compact rectangular module of ~92px x 34px",
+        "Visual appearance: A crisp pixel-bordered rectangular pill/box `border-2 border-[#3a3f4f] bg-[#1a1e28] px-2 py-1 flex items-center gap-2`",
+        "Left element: Miniature spinning Disc (24px diameter)",
+        "Center/Right element: Mini Play/Pause button (22px x 22px) and Song title tooltip / popover trigger icon",
+        "Popover details: Clicking the compact rectangle opens the Radix/Shadcn Popover revealing the full track scrubber, song title/artist, skip buttons, and volume slider at 10%",
+        "Maintains full data-testid suite: data-testid='music-player', data-testid='music-toggle', data-testid='music-popover-trigger', data-testid='music-volume'"
+      ]
+    },
+    "Guide": {
+      "path": "/app/frontend/src/components/Guide.jsx",
+      "modifications": [
+        "Add dismiss state (e.g., `dismissed` state or `hidden` toggle)",
+        "Allow pointer events on the bubble container while keeping the empty canvas click-through",
+        "Include a pixel '✕' close button at top-right of the bubble (`data-testid='guide-dismiss-button'`) with hover state `#d95c4a` (vintage red)",
+        "When dismissed, show a small unobtrusive pixel icon button on the guide guy ('?' or '💬') allowing the user to unhide/reopen the guide whenever desired (`data-testid='guide-restore-button'`)"
+      ]
+    },
+    "House": {
+      "path": "/app/frontend/src/components/House.jsx",
+      "modifications": [
+        "Add angled roof typography 'AHMAD'S AI LOFT' or 'AHMAD'S // RESIDENCE' nestled into the roof structure",
+        "Use CSS `transform: rotate(-12deg) skewX(-12deg)` on the left roof pitch or centered faceted timber fascia plate",
+        "Attach `playHoverSound()` to room button `onMouseEnter` / `onFocus`",
+        "Attach `playDoorSound()` to room button `onClick`"
+      ]
+    }
+  },
+  "GENERAL UI UX DESIGN GUIDELINES": [
+    "Retain the established masculine retro-tech aesthetic with hard pixel shadows and zero soft glows.",
+    "Ensure the entire loft fits cleanly in desktop viewports (100dvh) while permitting smooth scrolling on small screens.",
+    "Ensure contrast meets or exceeds WCAG AAA standards for all text badges and labels.",
+    "All interactive elements MUST have explicit data-testid attributes for testing verification.",
+    "Verify audio player starts at 10% volume and respects browser autoplay interaction policies."
+  ]
+}

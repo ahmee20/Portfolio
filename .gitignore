@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Environment files and credentials
+.env
+.env.*
+*.env
+memory/test_credentials.md
+
+# Python and Linters
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.ruff_cache/
+.venv/
+venv/
+
+# Platform & testing reports
+.emergent/
+test_reports/
+test_result.md
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
