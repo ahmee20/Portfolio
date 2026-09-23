@@ -1,0 +1,552 @@
+:root {
+  --loft-bg: #1c2029;
+  --loft-bg-2: #232837;
+  --loft-ink: #16171c;
+  --loft-paper: #f3efe6;
+  --loft-paper-2: #e8e2d4;
+  --loft-amber: #d9962b;
+  --loft-amber-2: #b87a1c;
+  --loft-teal: #2f8f83;
+  --loft-wood: #5a3d2b;
+  --loft-wood-2: #6d4a34;
+  --loft-roof: #7e352c;
+  --loft-muted: #5d5b56;
+  --loft-line: #cfc8b8;
+  --loft-taskbar: #12141a;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  font-family: "Space Grotesk", "Work Sans", sans-serif;
+  background: var(--loft-bg);
+  color: var(--loft-ink);
+}
+
+.font-pixel {
+  font-family: "Press Start 2P", monospace;
+  letter-spacing: 0.06em;
+}
+
+.loft-root {
+  --road-offset: 72px;
+  --road-thickness: 30px;
+  --dock-edge: 24px;
+  position: relative;
+  isolation: isolate;
+  height: 100dvh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--loft-bg-2) 0%, var(--loft-bg) 100%);
+}
+
+.loft-stage {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.loft-nightscape {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  pointer-events: none;
+  z-index: -1;
+}
+.loft-road {
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--road-offset) - var(--road-thickness));
+  height: var(--road-thickness);
+  border-top: 3px solid #626e63;
+  border-bottom: 3px solid #465650;
+  background: repeating-linear-gradient(90deg, transparent 0 70px, #465650 70px 73px), #293b3c;
+  pointer-events: none;
+}
+.loft-house {
+  position: relative;
+  flex-shrink: 0;
+  width: 100%;
+  max-width: min(1100px, calc((100dvh - 275px) * 2.1));
+}
+.house-roof { position: relative; height: 84px; }
+.roof-plane {
+  position: absolute;
+  inset: 0 0 6px;
+  clip-path: polygon(4% 10%, 95% 0, 100% 100%, 0 100%);
+  background-color: #773f35;
+  background-image: repeating-linear-gradient(176deg, transparent 0 17px, #512e29 18px 20px), repeating-linear-gradient(108deg, transparent 0 46px, #965348 47px 49px);
+  border-bottom: 5px solid #a3604c;
+}
+.roof-edge { position: absolute; bottom: 0; width: 100%; height: 7px; background: #4d2f28; border-top: 2px solid #b07654; }
+.roof-chimney { position: absolute; right: 12%; top: -14px; width: 30px; height: 58px; box-shadow: inset -7px 0 #422922; }
+.roof-lettering {
+  position: absolute;
+  left: 50%;
+  top: 22px;
+  white-space: nowrap;
+  transform: translateX(-50%) perspective(260px) rotateX(32deg) rotateZ(-4deg) skewX(-14deg);
+  color: #f0d8a1;
+  text-shadow: 2px 2px 0 #3b2623;
+  border-block: 2px solid #c09a6c;
+  padding: 7px 12px 5px;
+  background: #55352df2;
+}
+.roof-lettering .font-pixel { font-size: 20px; letter-spacing: 0; }
+
+@media (max-width: 767px) {
+  .loft-house { max-width: 620px; }
+  .roof-lettering .font-pixel { font-size: 14px; }
+  .roof-chimney { right: 9%; width: 22px; height: 46px; top: -6px; }
+  .loft-stage {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+
+/* Hard pixel shadows (no glow) */
+.px-shadow {
+  box-shadow: 4px 4px 0 var(--loft-ink);
+}
+.px-shadow-sm {
+  box-shadow: 2px 2px 0 var(--loft-ink);
+}
+
+.px-btn {
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 2px solid var(--loft-ink);
+  padding: 12px 18px;
+  background: var(--loft-amber);
+  color: var(--loft-ink);
+  box-shadow: 4px 4px 0 var(--loft-ink);
+  transition: background-color 150ms ease, transform 120ms ease, box-shadow 120ms ease;
+  cursor: pointer;
+}
+.px-btn:hover {
+  background: #e6a63a;
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--loft-ink);
+}
+.px-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--loft-ink);
+}
+.px-btn:focus-visible {
+  outline: 3px solid #f0c66a;
+  outline-offset: 2px;
+}
+
+/* Rooms */
+.room {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  display: block;
+  width: 100%;
+  transition: filter 160ms ease;
+}
+.room svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.room:hover {
+  filter: brightness(1.06);
+}
+.room:focus-visible {
+  outline: 3px solid var(--loft-amber);
+  outline-offset: -3px;
+}
+.room-tag {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 8px;
+  background: var(--loft-ink);
+  color: var(--loft-paper);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+.room:hover .room-tag {
+  background: var(--loft-amber);
+  color: var(--loft-ink);
+}
+
+/* Window */
+.win {
+  background: var(--loft-paper);
+  border: 2px solid var(--loft-ink);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+  animation: win-in 220ms ease-out;
+}
+@keyframes win-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.win-title {
+  background: var(--loft-amber);
+  border-bottom: 2px solid var(--loft-ink);
+  color: var(--loft-ink);
+}
+.win-ctrl {
+  width: 26px;
+  height: 24px;
+  border: 2px solid var(--loft-ink);
+  background: var(--loft-paper);
+  color: var(--loft-ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 120ms ease;
+}
+.win-ctrl:hover {
+  background: var(--loft-paper-2);
+}
+.win-ctrl.close:hover {
+  background: #d95c4a;
+  color: white;
+}
+
+.dashed-rule {
+  border-top: 2px dashed var(--loft-line);
+}
+
+.chip {
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 2px solid var(--loft-ink);
+  background: #fbf9f4;
+  color: var(--loft-ink);
+  padding: 8px 10px;
+  line-height: 1;
+  transition: background-color 120ms ease;
+}
+.chip:hover {
+  background: #f5e6c8;
+}
+
+.note-card {
+  background: #f4d77a;
+  border: 2px solid var(--loft-ink);
+}
+
+.card-px {
+  border: 2px solid var(--loft-ink);
+  background: #fbf9f4;
+  transition: transform 140ms ease, box-shadow 140ms ease;
+}
+.card-px:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--loft-ink);
+}
+
+.link-px {
+  font-family: "Press Start 2P", monospace;
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--loft-ink);
+  padding-bottom: 2px;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+.link-px:hover {
+  color: var(--loft-amber-2);
+  border-color: var(--loft-amber-2);
+}
+
+/* Taskbar */
+.taskbar {
+  position: relative;
+  z-index: 40;
+  height: 140px;
+  flex: 0 0 auto;
+  display: block;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--loft-paper);
+  pointer-events: none;
+}
+.rooms-island, .music-island { pointer-events: auto; }
+.rooms-island { position: absolute; left: var(--dock-edge); bottom: var(--road-offset); min-width: 0; }
+.music-island { position: absolute; right: var(--dock-edge); bottom: var(--road-offset); }
+.rooms-island-actions { display: flex; align-items: center; gap: 12px; }
+.rooms-island .task-btn.primary { height: 48px; padding-inline: 20px; border: 1px solid #638374; background: #2c4a3e; color: #f3efe6; box-shadow: 3px 0 0 #172329; }
+.rooms-island .task-btn.primary:hover { background: #3a5e4f; }
+.dock-clock { position: absolute; bottom: 15px; left: var(--dock-edge); display: flex; align-items: center; gap: 12px; }
+.dock-clock p { margin: 0; }
+.task-btn {
+  font-family: "Press Start 2P", monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0 14px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 2px solid transparent;
+  transition: background-color 140ms ease, color 140ms ease;
+  white-space: nowrap;
+}
+.task-btn.primary {
+  background: var(--loft-amber);
+  color: var(--loft-ink);
+}
+.task-btn.primary:hover {
+  background: #e6a63a;
+}
+.task-btn.tab {
+  background: #262a36;
+  color: var(--loft-paper);
+  border-color: #3a3f4f;
+}
+.task-btn.tab.minimized {
+  background: transparent;
+  color: #9aa0b2;
+}
+.task-btn.tab:hover {
+  background: #303546;
+}
+
+/* Disc */
+@keyframes disc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.disc {
+  animation: disc-spin 2.4s linear infinite;
+  animation-play-state: paused;
+  transform-origin: 50% 50%;
+}
+.disc.playing {
+  animation-play-state: running;
+}
+
+.icon-btn {
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--loft-paper);
+  border: 2px solid #3a3f4f;
+  background: #1c1f28;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+.icon-btn:hover {
+  background: #2b3040;
+  border-color: #55607a;
+}
+.icon-btn.accent {
+  background: var(--loft-amber);
+  color: var(--loft-ink);
+  border-color: var(--loft-amber);
+}
+.icon-btn.accent:hover {
+  background: #e6a63a;
+}
+
+.music-receiver { --music-accent: #eaa095; width: 256px; padding: 10px 12px; border: 1px solid #a18784; border-top: 2px solid #d1b2a8; background: #302a2d; box-shadow: 3px 0 0 #101b20; border-radius: 4px; }
+.receiver-track { display: flex; align-items: center; gap: 10px; }
+.receiver-track .disc { flex-shrink: 0; }
+.receiver-track-info { min-width: 0; }
+.receiver-track-info p:first-child { font-size: 8px; line-height: 1.6; letter-spacing: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.receiver-track-info p:last-child { font-size: 10px; color: #c5b4af; margin-top: 1px; }
+.receiver-controls { display: flex; align-items: center; gap: 6px; }
+.receiver-button { display: grid; place-items: center; flex: 0 0 30px; width: 30px; height: 30px; border-radius: 50%; color: #e1e6d5; background: transparent; transition: background-color 140ms ease, color 140ms ease; }
+.receiver-button:hover { background: #534044; color: #fff; }
+.receiver-play { flex-basis: 34px; width: 34px; height: 34px; background: var(--music-accent); color: #342326; }
+.receiver-play:hover { background: #ffc4b8; color: #342326; }
+.receiver-divider { flex-shrink: 0; width: 1px; height: 15px; margin-inline: 1px; background: #4a5853; }
+.receiver-volume { flex-basis: 26px; width: 26px; }
+.receiver-volume-range { flex: 1; width: 100%; min-width: 32px; }
+.music-range { appearance: none; display: block; height: 22px; margin: 0; cursor: pointer; background: transparent; }
+.music-range::-webkit-slider-runnable-track { height: 5px; background: linear-gradient(to right, var(--music-accent) var(--range-fill), #665759 var(--range-fill)); }
+.music-range::-moz-range-track { height: 5px; background: #455252; }
+.music-range::-moz-range-progress { height: 5px; background: var(--music-accent); }
+.music-range::-webkit-slider-thumb { appearance: none; width: 10px; height: 13px; background: var(--music-accent); border: 2px solid #302a2d; margin-top: -4px; border-radius: 0; }
+.music-range::-moz-range-thumb { width: 8px; height: 11px; background: var(--music-accent); border: 2px solid #302a2d; border-radius: 0; }
+.music-seek { width: 100%; height: 16px; margin: 1px 0; }
+.receiver-button:focus-visible, .music-range:focus-visible, .guide-toggle:focus-visible, .guide-dismiss:focus-visible, .room-sound-toggle:focus-visible { outline: 2px solid #eeb5a9; outline-offset: 2px; }
+.rooms-island .task-btn:focus-visible { outline: 2px solid #b1e3cc; outline-offset: 3px; }
+.room-sound-toggle { flex-shrink: 0; width: 28px; border-color: transparent; background: transparent; color: #a6b8ac; }
+.room-sound-toggle[aria-pressed="false"] { color: #737d83; }
+.room-sound-toggle:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Guide */
+@keyframes bob {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+.guide-figure {
+  animation: bob 2.2s ease-in-out infinite;
+}
+.guide-on-player { position: absolute; right: 0; bottom: calc(100% - 2px); width: 100%; max-width: calc(100vw - var(--dock-edge) - 12px); flex-direction: column; align-items: flex-end; }
+.guide-on-player .bubble { width: 100%; max-width: 100%; }
+.guide-toggle { pointer-events: auto; flex-shrink: 0; border: 0; padding: 0; background: transparent; transition: filter 140ms ease; }
+.guide-toggle:hover { filter: brightness(1.12); }
+.guide-bubble { pointer-events: auto; }
+.guide-dismiss { position: absolute; right: 3px; top: 3px; display: grid; place-items: center; width: 28px; height: 28px; color: #5d5b56; transition: background-color 120ms ease, color 120ms ease; }
+.guide-dismiss:hover { color: #fff; background: #a84f3f; }
+.bubble {
+  background: var(--loft-paper);
+  border: 2px solid var(--loft-ink);
+  color: var(--loft-ink);
+  box-shadow: 3px 3px 0 var(--loft-ink);
+  position: relative;
+}
+.bubble::after {
+  content: "";
+  position: absolute;
+  right: 20px;
+  bottom: -12px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 12px solid var(--loft-ink);
+}
+.bubble::before {
+  content: "";
+  position: absolute;
+  right: 22px;
+  bottom: -8px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 9px solid var(--loft-paper);
+  z-index: 1;
+}
+
+/* Boot */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.fade-in {
+  animation: fade-in 260ms ease-out;
+}
+.boot-line {
+  animation: fade-in 200ms ease-out;
+}
+.boot-bar {
+  border: 2px solid var(--loft-paper);
+  padding: 3px;
+}
+.boot-bar > span {
+  display: block;
+  height: 8px;
+  background: var(--loft-amber);
+  transition: width 300ms ease;
+}
+
+@keyframes house-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.house-in {
+  animation: house-in 420ms ease-out;
+}
+
+/* Window scroll area styling */
+.win-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--loft-ink) transparent;
+}
+.win-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+.win-scroll::-webkit-scrollbar-thumb {
+  background: var(--loft-ink);
+  border: 2px solid var(--loft-paper);
+}
+
+::selection {
+  background: var(--loft-amber);
+  color: var(--loft-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .disc, .guide-figure, .house-in, .fade-in, .win { animation: none; }
+}
+
+.about-status-highlight { background: #d5e7d2; color: #234634; border-color: #4b7859; font-weight: 700; }
+
+@media (min-width: 768px) and (max-width: 1599px) {
+  .loft-house { width: calc(100% - 280px); }
+}
+
+@media (max-width: 767px) {
+  .loft-root { --dock-edge: 12px; --road-offset: 132px; --mobile-player-width: 224px; }
+  .loft-stage { align-items: flex-start; justify-content: center; padding-top: 28px; padding-bottom: 90px; }
+  .rooms-island-actions { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .rooms-island .task-btn.primary { padding-inline: 12px; font-size: 8px; height: 42px; }
+  .window-return { display: none; }
+  .rooms-island .room-sound-toggle { margin-left: 3px; order: -1; }
+  .taskbar { height: 240px; }
+  .music-island { width: var(--mobile-player-width); bottom: 6px; }
+  .music-receiver { width: var(--mobile-player-width); padding: 6px 9px; }
+  .receiver-track .disc { width: 28px; height: 28px; }
+  .receiver-track-info p:last-child { font-size: 9px; }
+  .music-seek { height: 10px; }
+  .receiver-play { width: 30px; height: 30px; flex-basis: 30px; }
+  .receiver-controls { gap: 4px; }
+  .guide-on-player { bottom: calc(var(--road-offset) - 6px); flex-direction: row; align-items: flex-end; gap: 8px; }
+  .guide-on-player .bubble { flex: 1; width: auto; min-width: 0; padding: 9px 12px; font-size: 10px; line-height: 1.4; }
+  .guide-on-player .bubble p { padding-top: 7px; }
+  .guide-on-player .guide-dismiss { width: 20px; height: 20px; top: 0; right: 0; }
+  .guide-on-player .bubble::after { right: -9px; bottom: 16px; border-top: 6px solid transparent; border-bottom: 6px solid transparent; border-right: 0; border-left: 9px solid var(--loft-ink); }
+  .guide-on-player .bubble::before { right: -6px; bottom: 18px; border-top: 4px solid transparent; border-bottom: 4px solid transparent; border-right: 0; border-left: 7px solid var(--loft-paper); }
+  .dock-clock { bottom: auto; top: calc(100% - var(--road-offset) + var(--road-thickness) + 10px); flex-direction: column; align-items: flex-start; gap: 6px; max-width: calc(100vw - var(--mobile-player-width) - 2 * var(--dock-edge) - 16px); }
+}
+@media (max-width: 359px) {
+  .loft-root { --dock-edge: 8px; --mobile-player-width: 200px; }
+  .rooms-island .task-btn.primary { padding-inline: 8px; gap: 5px; font-size: 7px; }
+  .receiver-controls { gap: 2px; }
+  .dock-clock p:last-child { font-size: 6px; }
+  .roof-lettering .font-pixel { font-size: 12px; }
+}
